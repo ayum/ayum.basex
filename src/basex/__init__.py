@@ -1,20 +1,8 @@
 import math
 import importlib.util
 import sys
-from pbr.version import VersionInfo
 import os
 
-
-_v = VersionInfo('basex').semantic_version()
-__version__ = _v.release_string()
-version_info = _v.version_tuple()
-
-__author__ = "Aleksey Mikhaylov"
-__copyright__ = "Copyright 2022"
-__status__ = "Beta"
-
-if sys.hexversion < 0x03000000:
-    sys.exit("Python 3.0 or newer is required by skrepi module.")
 
 def lazy_import(name, package=None):
      spec = importlib.util.find_spec(name, package)
@@ -31,15 +19,31 @@ class BaseXException(Exception):
 
 class BaseXAlphabetTooLongException(BaseXException):
     """Raised when the input alphabet is too large"""
-    pass
+    def __str__(self):
+        return 'Alphabet too long'
+
 
 class BaseXAlphabetAmbiguousException(BaseXException):
     """Raised when the input alphabet is malformed"""
-    pass
+    def __init__(self, char=''):
+        self.char = char
 
-class BaseXNotInAlphabet(BaseXException):
+    def __str__(self):
+        return 'TypeError: {} is ambiguous'.format(self.char)
+
+
+class BaseXNotInAlphabetException(BaseXException):
     """Raised when the input contains characters not in alphabet"""
-    pass
+    def __init__(self, base=58):
+        self.base = base
+
+    def __str__(self):
+        return 'Error: Non-base{} character'.format(self.base)
+
+class BaseXExpectedStringException(BaseXException):
+    """Raised when the input is not a string"""
+    def __str__(self):
+        return 'TypeError: Expected String'
 
 class basex:
     def __init__(self, alphabet):
@@ -48,7 +52,7 @@ class basex:
         self.base_map = bytearray([255] * 256)
         for i in range(len(alphabet)):
             if self.base_map[ord(alphabet[i])] != 255:
-                raise BaseXAlphabetAmbiguousException()
+                raise BaseXAlphabetAmbiguousException(alphabet[i])
             self.base_map[ord(alphabet[i])] = i
         self.alphabet = alphabet
         self.base = len(alphabet)
@@ -84,7 +88,6 @@ class basex:
                 it1 -= 1
                 i += 1
 
-            # if (carry !== 0) { throw new Error('Non-zero carry') }
             length = i
             pbegin += 1
 
@@ -100,6 +103,8 @@ class basex:
         return res
 
     def decode(self, source):
+        if not isinstance(source, str):
+            raise BaseXExpectedStringException()
         if len(source) == 0:
             return b''
 
@@ -119,7 +124,7 @@ class basex:
             carry = self.base_map[ord(source[psz])]
             # Invalid character
             if carry == 255:
-                raise BaseXNotInAlphabet()
+                raise BaseXNotInAlphabetException()
             i = 0
             it3 = size - 1
             while (carry != 0 or i < length) and (it3 != -1):
@@ -147,4 +152,4 @@ class basex:
 
 alphabet = lazy_import('.alphabet', __name__)
 
-__all__ = ['basex', 'BaseXException', 'BaseXAlphabetTooLongException', 'BaseXAlphabetAmbiguousException', 'BaseXNotInAlphabet', 'alphabet']
+__all__ = ['basex', 'BaseXException', 'BaseXAlphabetTooLongException', 'BaseXAlphabetAmbiguousException', 'BaseXNotInAlphabetException', 'BaseXExpectedStringException', 'alphabet']
