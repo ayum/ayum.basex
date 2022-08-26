@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "basex"
+name = "base-x"
 authors = [
   { name="Aleksey Mikhaylov" },
 ]
