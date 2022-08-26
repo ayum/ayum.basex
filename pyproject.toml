@@ -9,10 +9,10 @@ authors = [
 ]
 description = "Encoding/decoding of any given alphabet with any base using bitcoin style"
 readme = "README.md"
-license = { file="LICENSE" }
+license = "MIT"
 requires-python = ">=3.10"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Topic :: Utilities",
     "Topic :: Software Development :: Libraries",
