@@ -11,7 +11,7 @@ This is a port of js base-x package from [`cryptocoinjs/base-x`](https://github.
 Base58
 
 ``` python
-import basex
+from basex import basex
 
 BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 bs58 = basex(BASE58)
