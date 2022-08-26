@@ -12,7 +12,6 @@ readme = "README.md"
 license = { file="LICENSE" }
 requires-python = ">=3.10"
 classifiers = [
-    "Private :: Do Not Upload",
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Topic :: Utilities",
