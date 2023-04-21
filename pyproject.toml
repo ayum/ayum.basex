@@ -30,6 +30,9 @@ dynamic = ["version"]
 [tool.hatch.version]
 source = "vcs"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/basex"]
+
 [tool.pytest.ini_options]
 pythonpath = [
   "src"
